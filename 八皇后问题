@@ -1,0 +1,66 @@
+//八皇后问题
+//使用回溯算法(逐行探测,即探测第j行时,前j-1行已经摆放好了j-1个不同的皇后)
+//matrix数组每一行的第0列存放皇后在这行的列数
+#include<iostream>
+#include<string>
+#include<string.h>
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+const int M = 8;
+const int N = 8;
+int matrix[M+1][N+1] = {0};
+
+//判断在第i+1行,第j+1列摆放皇后是否会与前面已经摆好的i个皇后造成冲突
+bool isLegal(const int &i, const int &j)
+{
+	for(int row = 1; row < i; ++row){
+		int col = matrix[row][0];
+		if(col == j || abs(i-row) == abs(j-col))
+			return false;
+	}
+	return true;
+}
+
+//打印出对应的八皇后摆放位置
+void print(int matrix[M+1][N+1])
+{
+	static int count = 1;
+	printf("Case NO.%d\n", count++);
+	
+	for(int i = 1; i < M; ++i){
+		for(int j = 1; j < N; ++j){
+			if(matrix[i][j] == 1)
+				printf("%c ", 2);
+			else
+				printf(". ");
+		}
+		printf("\n");
+	}
+	
+}
+
+//实现八皇后
+void implement_queen(const int &num)
+{
+	if(num > N){
+		print(matrix);
+		return;
+	}
+	for(int j = 1; j <= N; ++j){
+		matrix[num][j] = 1;
+		if(isLegal(num, j)){
+			matrix[num][0] = j;
+			implement_queen(num+1);
+		}
+		matrix[num][j] = 0;
+	}
+}
+
+int main()
+{
+	implement_queen(1);
+    cout<<endl;
+
+	return 0;
+}
